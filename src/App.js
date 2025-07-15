@@ -50,76 +50,76 @@ function App() {
     };
 
     return (
-      <div className="container">
+      <div className="container mobile-container">
         <div className="text-center mb-20">
-          <div className="flex" style={{justifyContent: 'center'}}>
-            <ChefHat size={48} color="white" />
-            <h1 className="text-white" style={{fontSize: '32px', marginLeft: '10px'}}>La Taberna del Café</h1>
+          <div className="header-flex">
+            <ChefHat className="header-icon" />
+            <h1 className="main-title">La Taberna del Café</h1>
           </div>
-          <p className="text-white">Sistema de Pedidos de Menús</p>
+          <p className="subtitle">Sistema de Pedidos de Menús</p>
         </div>
 
-        <div className="card" style={{maxWidth: '400px', margin: '0 auto'}}>
+        <div className="login-card">
           <div className="flex mb-20">
             <User size={24} color="#8B4513" />
-            <h2 className="text-amber">Verificación de Empleado</h2>
+            <h2 className="section-title">Verificación de Empleado</h2>
           </div>
 
-          <label className="text-amber">Número de Cédula</label>
+          <label className="input-label">Número de Cédula</label>
           <input
             type="text"
-            className="input"
+            className="input mobile-input"
             value={cedula}
             onChange={(e) => setCedula(e.target.value.replace(/\D/g, ''))}
             placeholder="Ingrese su número de cédula"
             maxLength="15"
+            inputMode="numeric"
+            autoComplete="off"
           />
 
-          {error && <p style={{color: 'red', fontSize: '14px'}}>{error}</p>}
+          {error && <p className="error-text">{error}</p>}
 
           <button 
-            className="btn btn-primary" 
+            className="btn btn-primary mobile-btn" 
             onClick={handleSearch}
             disabled={cedula.length < 6 || searchingEmployee}
-            style={{width: '100%'}}
           >
             {searchingEmployee ? 'Consultando...' : 'Consultar'}
           </button>
 
           {foundEmployee && (
-            <div style={{background: '#f0fdf4', border: '1px solid #22c55e', borderRadius: '8px', padding: '15px', margin: '15px 0'}}>
-              <h4 style={{color: '#166534', marginBottom: '10px'}}>✅ Empleado Verificado</h4>
-              <div className="flex mb-20">
-                <User size={16} color="#22c55e" />
-                <span style={{color: '#166534', fontWeight: 'bold'}}>{foundEmployee.name}</span>
-              </div>
-              <div className="flex mb-20">
-                <Building2 size={16} color="#22c55e" />
-                <span style={{color: '#166534'}}>{foundEmployee.company}</span>
-              </div>
-              <div className="flex">
-                <CreditCard size={16} color="#22c55e" />
-                <span style={{color: '#166534'}}>Plan {foundEmployee.plan}</span>
-                {foundEmployee.plan === 'premium' && (
-                  <span style={{background: '#fef3c7', color: '#d97706', padding: '2px 8px', borderRadius: '12px', fontSize: '12px', marginLeft: '8px'}}>
-                    Premium
-                  </span>
-                )}
+            <div className="employee-card">
+              <h4 className="employee-title">✅ Empleado Verificado</h4>
+              <div className="employee-info">
+                <div className="info-row">
+                  <User size={16} color="#22c55e" />
+                  <span className="info-text">{foundEmployee.name}</span>
+                </div>
+                <div className="info-row">
+                  <Building2 size={16} color="#22c55e" />
+                  <span className="info-text">{foundEmployee.company}</span>
+                </div>
+                <div className="info-row">
+                  <CreditCard size={16} color="#22c55e" />
+                  <span className="info-text">Plan {foundEmployee.plan}</span>
+                  {foundEmployee.plan === 'premium' && (
+                    <span className="premium-badge">Premium</span>
+                  )}
+                </div>
               </div>
               <button 
-                className="btn btn-success mt-20" 
+                className="btn btn-success mobile-btn mt-20" 
                 onClick={handleLoadMenus}
-                style={{width: '100%'}}
               >
                 Cargar Menús
               </button>
             </div>
           )}
 
-          <div className="text-center mt-20">
-            <p style={{fontSize: '12px', color: '#8B4513'}}>Datos de prueba:</p>
-            <p style={{fontSize: '12px', color: '#A0522D'}}><strong>Premium:</strong> 12345678</p>
-            <p style={{fontSize: '12px', color: '#A0522D'}}><strong>Básico:</strong> 87654321</p>
+          <div className="test-data">
+            <p className="test-title">Datos de prueba:</p>
+            <p className="test-item"><strong>Premium:</strong> 12345678</p>
+            <p className="test-item"><strong>Básico:</strong> 87654321</p>
           </div>
         </div>
       </div>
@@ -173,14 +173,14 @@ function App() {
 
     const renderCategory = (category, title, subtitle) => (
       <div className="card">
-        <div className="flex mb-20">
-          <ChefHat size={24} color="#8B4513" />
+        <div className="category-header">
+          <ChefHat size={20} color="#8B4513" />
           <div>
-            <h3 className="text-amber">{title}</h3>
-            <p style={{fontSize: '14px', color: '#A0522D'}}>{subtitle}</p>
+            <h3 className="category-title">{title}</h3>
+            <p className="category-subtitle">{subtitle}</p>
           </div>
         </div>
-        <div className="grid">
+        <div className="menu-grid">
           {menuData[category].map(item => (
             <div
               key={item.id}
@@ -188,27 +188,17 @@ function App() {
                 (category === 'ensaladas' ? 'selected-multiple' : 'selected') : ''}`}
               onClick={() => handleItemSelect(category, item.id)}
             >
-              <div className="flex-between">
-                <h4 className="text-amber">{item.name}</h4>
+              <div className="menu-item-header">
+                <h4 className="menu-item-title">{item.name}</h4>
                 {isItemSelected(category, item.id) && (
-                  <span style={{
-                    background: category === 'ensaladas' ? '#3b82f6' : '#22c55e',
-                    color: 'white',
-                    borderRadius: '50%',
-                    width: '20px',
-                    height: '20px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: '12px'
-                  }}>✓</span>
+                  <span className={`check-icon ${category === 'ensaladas' ? 'check-multiple' : 'check-single'}`}>
+                    ✓
+                  </span>
                 )}
               </div>
-              <p style={{fontSize: '14px', color: '#A0522D', margin: '8px 0'}}>{item.desc}</p>
-              <div>
-                <span style={{background: '#D2B48C', color: '#654321', padding: '4px 8px', borderRadius: '4px', fontSize: '12px'}}>
-                  {employee.plan}
-                </span>
+              <p className="menu-item-desc">{item.desc}</p>
+              <div className="menu-item-footer">
+                <span className="plan-badge">{employee.plan}</span>
               </div>
             </div>
           ))}
@@ -217,13 +207,13 @@ function App() {
     );
 
     return (
-      <div className="container">
+      <div className="container mobile-container">
         <div className="text-center mb-20">
-          <div className="flex" style={{justifyContent: 'center'}}>
-            <ChefHat size={32} color="white" />
-            <h1 className="text-white" style={{fontSize: '24px', marginLeft: '10px'}}>La Taberna del Café</h1>
+          <div className="header-flex">
+            <ChefHat className="header-icon-small" />
+            <h1 className="page-title">La Taberna del Café</h1>
           </div>
-          <p className="text-white">Hola {employee.name}, selecciona tu menú para: {DAYS[currentDay]}</p>
+          <p className="subtitle">Hola {employee.name}, selecciona tu menú para: {DAYS[currentDay]}</p>
         </div>
 
         <div className="days-nav">
@@ -234,7 +224,7 @@ function App() {
                 isDayCompleted(day) ? 'completed' : 'inactive'}`}
               onClick={() => setCurrentDay(index)}
             >
-              {day}
+              {day.slice(0, 3)}
             </button>
           ))}
         </div>
@@ -243,28 +233,32 @@ function App() {
         {renderCategory('ensaladas', 'Ensaladas', '(Selecciona una o varias)')}
         {renderCategory('postres', 'Postres', '(Selecciona uno)')}
 
-        <div className="flex-between mt-20">
-          <button className="btn btn-secondary" onClick={() => setScreen('login')}>
+        <div className="navigation-buttons">
+          <button className="btn btn-secondary mobile-btn" onClick={() => setScreen('login')}>
             <ArrowLeft size={16} /> Volver
           </button>
-          <div className="flex">
+          
+          <div className="nav-controls">
             <button 
-              className="btn btn-secondary" 
+              className="btn btn-secondary nav-btn" 
               onClick={() => setCurrentDay(Math.max(0, currentDay - 1))}
               disabled={currentDay === 0}
             >
-              <ArrowLeft size={16} /> Anterior
+              <ArrowLeft size={14} />
             </button>
-            <span className="text-white">Día {currentDay + 1} de {DAYS.length}</span>
-            <button className="btn btn-primary" onClick={() => setScreen('summary')}>
-              <Check size={16} /> Ver Resumen
+            
+            <span className="day-indicator">Día {currentDay + 1}/{DAYS.length}</span>
+            
+            <button className="btn btn-primary nav-btn" onClick={() => setScreen('summary')}>
+              <Check size={14} />
             </button>
+            
             <button 
-              className="btn btn-success" 
+              className="btn btn-success nav-btn" 
               onClick={() => setCurrentDay(Math.min(DAYS.length - 1, currentDay + 1))}
               disabled={currentDay === DAYS.length - 1}
             >
-              Siguiente <ArrowRight size={16} />
+              <ArrowRight size={14} />
             </button>
           </div>
         </div>
@@ -293,14 +287,14 @@ function App() {
     };
 
     return (
-      <div className="container">
+      <div className="container mobile-container">
         <div className="text-center mb-20">
-          <div className="flex" style={{justifyContent: 'center'}}>
-            <ChefHat size={32} color="white" />
-            <h1 className="text-white" style={{fontSize: '24px', marginLeft: '10px'}}>La Taberna del Café</h1>
+          <div className="header-flex">
+            <ChefHat className="header-icon-small" />
+            <h1 className="page-title">La Taberna del Café</h1>
           </div>
-          <p className="text-white">Resumen de tu pedido semanal</p>
-          <p className="text-white">{employee.name} - {employee.company}</p>
+          <p className="subtitle">Resumen de tu pedido semanal</p>
+          <p className="subtitle">{employee.name} - {employee.company}</p>
         </div>
 
         <div className="card">
@@ -311,30 +305,30 @@ function App() {
             if (!dayOrder || Object.keys(dayOrder).length === 0) return null;
             
             return (
-              <div key={day} style={{borderBottom: '1px solid #D2B48C', paddingBottom: '20px', marginBottom: '20px'}}>
-                <h3 className="text-amber mb-20">{day}</h3>
-                <div className="grid">
+              <div key={day} className="day-summary">
+                <h3 className="day-title">{day}</h3>
+                <div className="summary-content">
                   {dayOrder.platos && dayOrder.platos.length > 0 && (
-                    <div>
-                      <h4 style={{color: '#8B4513', marginBottom: '10px'}}>Plato Principal:</h4>
+                    <div className="category-summary">
+                      <h4 className="summary-category">Plato Principal:</h4>
                       {dayOrder.platos.map(id => (
-                        <p key={id} style={{color: '#A0522D', marginLeft: '15px'}}>• {getItemName('platos', id)}</p>
+                        <p key={id} className="summary-item">• {getItemName('platos', id)}</p>
                       ))}
                     </div>
                   )}
                   {dayOrder.ensaladas && dayOrder.ensaladas.length > 0 && (
-                    <div>
-                      <h4 style={{color: '#8B4513', marginBottom: '10px'}}>Ensaladas:</h4>
+                    <div className="category-summary">
+                      <h4 className="summary-category">Ensaladas:</h4>
                       {dayOrder.ensaladas.map(id => (
-                        <p key={id} style={{color: '#A0522D', marginLeft: '15px'}}>• {getItemName('ensaladas', id)}</p>
+                        <p key={id} className="summary-item">• {getItemName('ensaladas', id)}</p>
                       ))}
                     </div>
                   )}
                   {dayOrder.postres && dayOrder.postres.length > 0 && (
-                    <div>
-                      <h4 style={{color: '#8B4513', marginBottom: '10px'}}>Postre:</h4>
+                    <div className="category-summary">
+                      <h4 className="summary-category">Postre:</h4>
                       {dayOrder.postres.map(id => (
-                        <p key={id} style={{color: '#A0522D', marginLeft: '15px'}}>• {getItemName('postres', id)}</p>
+                        <p key={id} className="summary-item">• {getItemName('postres', id)}</p>
                       ))}
                     </div>
                   )}
@@ -344,12 +338,12 @@ function App() {
           })}
         </div>
 
-        <div className="flex-between mt-20">
-          <button className="btn btn-secondary" onClick={() => setScreen('menu')}>
+        <div className="summary-actions">
+          <button className="btn btn-secondary mobile-btn" onClick={() => setScreen('menu')}>
             <ArrowLeft size={16} /> Modificar
           </button>
           <button 
-            className="btn btn-success" 
+            className="btn btn-success mobile-btn" 
             onClick={handleConfirm}
             disabled={loading}
           >
@@ -365,8 +359,8 @@ function App() {
     const generateBarcode = (code) => {
       const canvas = document.createElement('canvas');
       const ctx = canvas.getContext('2d');
-      canvas.width = 300;
-      canvas.height = 80;
+      canvas.width = 280;
+      canvas.height = 70;
       
       ctx.fillStyle = 'white';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -375,19 +369,19 @@ function App() {
       for (let i = 0; i < code.length; i++) {
         const char = code[i];
         const digit = isNaN(parseInt(char)) ? char.charCodeAt(0) % 10 : parseInt(char);
-        const x = 20 + i * 24;
+        const x = 20 + i * 22;
         
         for (let j = 0; j < digit + 1; j++) {
           if (j % 2 === 0) {
-            ctx.fillRect(x + j * 2, 10, 2, 40);
+            ctx.fillRect(x + j * 2, 10, 2, 35);
           }
         }
       }
       
       ctx.fillStyle = 'black';
-      ctx.font = '12px monospace';
+      ctx.font = '10px monospace';
       ctx.textAlign = 'center';
-      ctx.fillText(code, canvas.width / 2, 70);
+      ctx.fillText(code, canvas.width / 2, 60);
       
       return canvas.toDataURL();
     };
@@ -433,52 +427,45 @@ function App() {
     };
 
     return (
-      <div className="container">
+      <div className="container mobile-container">
         <div className="text-center mb-20">
-          <div className="flex" style={{justifyContent: 'center'}}>
-            <div style={{
-              width: '64px', 
-              height: '64px', 
-              background: '#22c55e', 
-              borderRadius: '50%', 
-              display: 'flex', 
-              alignItems: 'center', 
-              justifyContent: 'center',
-              marginRight: '15px'
-            }}>
-              <Check size={32} color="white" />
+          <div className="success-header">
+            <div className="success-icon">
+              <Check size={24} color="white" />
             </div>
-            <h1 className="text-white" style={{fontSize: '32px'}}>¡Pedido Confirmado!</h1>
+            <h1 className="success-title">¡Pedido Confirmado!</h1>
           </div>
-          <p className="text-white">Tu orden semanal ha sido procesada exitosamente</p>
+          <p className="subtitle">Tu orden semanal ha sido procesada exitosamente</p>
         </div>
 
         <div className="card text-center">
-          <h2 className="text-amber mb-20">Código de Pedido</h2>
-          <div style={{background: 'white', padding: '20px', borderRadius: '10px', border: '2px solid #D2B48C', marginBottom: '20px'}}>
-            <img src={generateBarcode(orderCode)} alt="Código de barras" style={{marginBottom: '10px'}} />
-            <p style={{fontFamily: 'monospace', fontSize: '18px', fontWeight: 'bold', color: '#8B4513'}}>{orderCode}</p>
+          <h2 className="section-title mb-20">Código de Pedido</h2>
+          <div className="barcode-container">
+            <img src={generateBarcode(orderCode)} alt="Código de barras" className="barcode-image" />
+            <p className="order-code">{orderCode}</p>
           </div>
-          <p style={{fontSize: '14px', color: '#A0522D', marginBottom: '20px'}}>
+          <p className="barcode-instruction">
             Presenta este código en el restaurante para retirar tu pedido
           </p>
 
-          <div style={{background: '#FFF8DC', padding: '20px', borderRadius: '10px', marginBottom: '20px'}}>
-            <h3 style={{color: '#8B4513', marginBottom: '15px'}}>Detalles del Pedido</h3>
-            <p><strong>Empleado:</strong> {employee.name}</p>
-            <p><strong>Empresa:</strong> {employee.company}</p>
-            <p><strong>Plan:</strong> {employee.plan}</p>
-            <p><strong>Fecha:</strong> {new Date().toLocaleDateString()}</p>
+          <div className="order-details">
+            <h3 className="details-title">Detalles del Pedido</h3>
+            <div className="details-content">
+              <p><strong>Empleado:</strong> {employee.name}</p>
+              <p><strong>Empresa:</strong> {employee.company}</p>
+              <p><strong>Plan:</strong> {employee.plan}</p>
+              <p><strong>Fecha:</strong> {new Date().toLocaleDateString()}</p>
+            </div>
           </div>
 
-          <div className="flex" style={{justifyContent: 'center'}}>
-            <button className="btn btn-primary" onClick={downloadPDF}>
+          <div className="confirmed-actions">
+            <button className="btn btn-primary mobile-btn" onClick={downloadPDF}>
               <Download size={16} /> Descargar PDF
             </button>
-            <button className="btn btn-secondary" onClick={() => setScreen('summary')}>
+            <button className="btn btn-secondary mobile-btn" onClick={() => setScreen('summary')}>
               Ver Resumen
             </button>
-            <button className="btn btn-secondary" onClick={handleNewOrder}>
+            <button className="btn btn-secondary mobile-btn" onClick={handleNewOrder}>
               Nuevo Pedido
             </button>
           </div>
